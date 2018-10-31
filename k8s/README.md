@@ -38,7 +38,7 @@ If you're an SE, then you already have access to GCP. If you are a partner, then
 - Store the .json key_file locally somewhere you can access later
 
 ### setup your personal repo
-Today, you will all be leveraging my TFE organization. This means you will be provisioning all of your labs from your own workspace. This isn't complicated because you'll be leveraging modules I've written and passing them values particular to your account so that you can spin up the necessary sandbox environments to actually run the labs.
+Today, you will all be leveraging my TFE organization. This means you will be provisioning all of your labs from your own workspace nested in my org. This isn't complicated because you'll be leveraging modules I've written and passing them values particular to your account so that you can spin up the necessary sandbox environments to actually run the labs.
 
 However, you still have to create the repo, then tag it to a workspace in my terraform account. This is going to require coordination between you and me amidst all of the other people in this class, so let the chaos begin:
 
@@ -55,18 +55,20 @@ I've already added everyone to my TFE se-training team, so you should be able to
 
 - Add New workspace
 - Title it as yourName_k8s
-- pont to my repo joshuaNjordan85/k8sIstioEnvoyConsulLab
+- point to my repo joshuaNjordan85/k8sIstioEnvoyConsulLab
 - click on more options
 - set the branch to k8s/yourName
 - save
 
-Now you need to configure variables so that we don't have to expose anything sensative to the world. After you configure your workspace, click on set variables and perform the following steps:
+Now you need to configure variables so that we don't have to expose anything sensitive to the world. After you configure your workspace, click on set variables and perform the following steps:
 
-- add a sensative variable serviceAccount: set the value to the .json credential file you saved earlier that represents your machine identify.
-- add a sensative variable masterAuthPass: set the value to anything you want, but make sure it's at least 16 characters or you will be in trouble. Don't forget it either.
+- add a sensitive variable serviceAccount: set the value to the .json credential file you saved earlier that represents your machine identity.
+- add a sensitive variable masterAuthPass: set the value to anything you want, but make sure it's at least 16 characters or you will be in trouble. Don't forget it either.
 
 ### deploy infrastructure
 Queue up your plan and let's watch the magic or disaster...whichever comes first.
 
 ### test cluster connectivity
 Assuming all went well and we all have k8s clusters on GCP, we should be able to navigate to our cluster from the k8s engine tab from the GCP console. Click on the connect button and copy/paste the gcloud command into your local terminal. Now run ```kubectl get nodes``` ... I bet you see your cluster. If you don't, just let me know.
+
+If all is well then we can move on to the k8sWithIstio directory and dig into the tool.
