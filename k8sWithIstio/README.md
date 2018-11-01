@@ -6,7 +6,6 @@ You've been instructed to this README because your k8s environment is up and run
 - install istio in the cloud
 - deploy an app
 - setup an ingress gateway to see the app
--
 
 ### install dependencies
 Istio's control plane is installed in its own Kubernetes istio-system namespace, but it can manage microservices from all other namespaces. What we are going to install is the core components, tools, and some samples. As you go through this, keep in the back of your mind that we are using a ton of pre-written configs, and that is really cutting down the work we would have to do if we were starting from scratch.
@@ -15,29 +14,29 @@ Istio's control plane is installed in its own Kubernetes istio-system namespace,
 
 [Istio Release Page](https://github.com/istio/istio/releases)
  - create a directory for this lab; I don't care where, but here's an example
- ```
+ ```bash
  mkdir ~/se-training && mkdir ~/se-training/k8sIstio && cd ~/se-training/k8sIstio
  ```
  - get your Istio version 1.0.0
- ```
+ ```bash
  curl -L https://git.io/getLatestIstio | ISTIO_VERSION=1.0.0 sh -
  ```
  - you will have instructions post installation for how to add istioctl to your $PATH:
    - you can follow those directions
    - you can do so manually
-   ```
+   ```bash
    mv istio-1.0.0/bin/istioctl /usr/local/bin || cp istio-1.0.0/bin/istioctl /usr/local/bin
    ```
  - check your installation
- ```
+ ```bash
  which istioctl
  ```
  - make sure it works
- ```
+ ```bash
  istioctl version
  ```
  - gke rbac config
- ```
+ ```bash
  kubectl create clusterrolebinding cluster-admin-binding \
  --clusterrole=cluster-admin \
  --user=$(gcloud config get-value core/account)
@@ -47,32 +46,32 @@ Istio's control plane is installed in its own Kubernetes istio-system namespace,
 ### install istio in the cloud
  - make sure you are in the istio-1.0.0 dir that we downloaded in the previous section: ```cwd```
  - if the previous step's output doesn't look like
- ```
+ ```bash
  <some>/<path>/<you>/<defined>/istio-1.0.0
  ```
  then
- ```
+ ```bash
  cd <some>/<path>/<you>/<defined>/istio-1.0.0
  ```
  - install resource definitions
- ```
+ ```bash
  kubectl apply -f install/kubernetes/helm/istio/templates/crds.yaml
  ```
  **NOTE**: _if you remember the k8s resource definition bit from earlier, then you recognize that we just pushed a ton of resources that describe what our pod environment should look like with istio in it and istio knows how/where to get these resources_
  - install istio and associated services into our gke environment
-```
+```bash
 kubectl apply -f install/kubernetes/istio-demo-auth.yaml
 ```
  - review what we installed
- ```
+ ```bash
  kubectl get svc -n istio-system
  ```
  - **TAKE NOTE OF THE LoadBalancer IP**
- ```
+ ```bash
  export K8S_ISTIO_HOST=<whatever it is>
  ```
  - check the status of everything
- ```
+ ```bash
  kubectl get pods -n istio-system || kubectl get pods -n istio-system -w
  ```
  - **YOU CAN'T DO ANYTHING UNLESS EVERYTHING IS RUNNING OR COMPLETED UNLESS YOU PREFER TO CRY**
@@ -82,28 +81,29 @@ kubectl apply -f install/kubernetes/istio-demo-auth.yaml
 ### deploy an app
 We will be deploying the application the Istio dev peeps use when they want to test new features...what fun. It's a book review application...so if you like to read...you'll love this. All of the source code for the app is in ```istio-1.0.0/samples/bookinfo``` if you are interested in digging into the particulars.
  - check out the yaml for bookinfo
- ```
+ ```bash
  cat samples/bookinfo/platform/kube/bookinfo.yaml
  ```
  - reflect, reason, and discuss: **NOTE**: _there's nothing istioish about this config. It's just the k8s way, so, if we want to spice up our k8s tea, we need to inject this config with istioctl (lol...I bet you were wondering when we were going to use it!)_
  - check out the yaml for bookinfo with istioness applied to it
- ```
+ ```bash
  istioctl kube-inject -f samples/bookinfo/platform/kube/bookinfo.yaml
  ```
  - set up a namespace for auto-injection
- ```
+ ```bash
  kubectl label namespace default istio-injection=enabled
  ```
  - now apply the istio config to the cluster
- ```
+ ```bash
  kubectl apply -f samples/bookinfo/platform/kube/bookinfo.yaml
  ```
  - check your pods
- ```kubectl get pods
+ ```bash
+ kubectl get pods
  ```
  **NOTE**: _there's more than one container; the second one is the istio proxy_
  - check your services
- ```
+ ```bash
  kubectl get services
  ```
  - pause for collateral damage
@@ -111,107 +111,107 @@ We will be deploying the application the Istio dev peeps use when they want to t
 ### setup an ingress gateway to see the app
 We can't see anything yet, we actually have to setup the istio ingress so it can start routing traffic to the productpage for us. We are also going to make sure we are forwarding between teh right version of the applications we are running, so we will add a set of destination rules between the different services, ensuring that version traffic is forwarded properly. Let's do that now.
  - observe the gateway yaml
- ```
+ ```bash
  cat samples/bookinfo/networking/bookinfo-gateway.yaml
  ```
  - apply it
- ```
+ ```bash
  kubectl apply -f samples/bookinfo/networking/bookinfo-gateway.yaml
  ```
  - observe the destination rules
- ```
+ ```bash
  cat samples/bookinfo/networking/destination-rule-all-mtls.yaml
  ```
  - create the destination rules
- ```
+ ```bash
  kubectl create -f samples/bookinfo/networking/destination-rule-all-mtls.yaml
  ```
  - store HOST
- ```
+ ```bash
  export INGRESS_HOST=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].ip}') && echo $INGRESS_HOST
  ```
  - store IP
- ```
+ ```bash
  export INGRESS_PORT=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name=="http2")].port}') && echo $INGRESS_PORT
  ```
  - build gateway
- ```
+ ```bash
  export GATEWAY_URL=${INGRESS_HOST}:${INGRESS_PORT}
  ```
  - set your firewall rule
- ```
+ ```bash
  gcloud compute firewall-rules create allow-book --allow tcp:${INGRESS_PORT},tcp:443
  ```
  **NOTE**: if Failure
- ```
+ ```bash
  gcloud compute firewall-rules update allow-book --allow tcp:${INGRESS_PORT},tcp:443
  ```
  - observe the bookinfo-gateway config
- ```
+ ```bash
  cat samples/bookinfo/networking/bookinfo-gateway.yaml
  ```
  - connect the istio ingress to the services
- ```
+ ```bash
  kubectl apply -f samples/bookinfo/networking/bookinfo-gateway.yaml
  ```
  - observe your monster
- ```
+ ```bash
  echo http://${GATEWAY_URL}/productpage || echo http://${GATEWAY_URL}/productpage | pbcopy
  ```
 
 ### configure routing
 Now we are going to transition a bit into istioctl usage. The goal is to play around with our traffic, managing it in various ways.
  - what are our current rules
- ```
+ ```bash
  istioctl get destinationrules
  ```
  - look at service rules
- ```
+ ```bash
  cat samples/bookinfo/networking/virtual-service-all-v1.yaml
  ```
  - create the rules
- ```
+ ```bash
  kubectl create -f samples/bookinfo/networking/virtual-service-all-v1.yaml
  ```
  - did it work?
- ```
+ ```bash
  kubectl get virtualservice -o yaml
  ```
  - go back to url and lets talk about it a bit
  - look at a different service route rule
- ```
+ ```bash
  cat samples/bookinfo/networking/virtual-service-reviews-test-v2.yaml
  ```
  - apply new service route rule
- ```
+ ```bash
  kubectl apply -f samples/bookinfo/networking/virtual-service-reviews-test-v2.yaml
  ```
  - go back to url and lets talk about it a bit
  - look at yet another service route rule
- ```
+ ```bash
  cat samples/bookinfo/networking/virtual-service-reviews-50-v3.yaml
  ```
  - apply new service route rule
- ```
+ ```bash
  kubectl apply -f samples/bookinfo/networking/virtual-service-reviews-50-v3.yaml
  ```
  - look at final service route rule
- ```
+ ```bash
  cat samples/bookinfo/networking/virtual-service-reviews-v3.yaml
  ```
  - apply final service route rule
- ```
+ ```bash
  kubectl apply -f samples/bookinfo/networking/virtual-service-reviews-v3.yaml
  ```
 
 ### clean up
 We're done...clean up after yourself please!
  - uninstall Istio from cloud
- ```
+ ```bash
  kubectl delete -f samples/bookinfo/platform/kube/bookinfo.yaml
  ```
  - uninstall the auth too
- ```
+ ```bash 
  kubectl delete -f install/kubernetes/istio-demo-auth.yaml
  ```
  - use terraform to delete the cloud resources
