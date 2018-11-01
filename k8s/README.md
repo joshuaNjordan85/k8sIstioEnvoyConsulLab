@@ -55,7 +55,8 @@ However, you still have to create the repo, then tag it to a workspace in my ter
 - checkout a new branch in the following format yourName_k8s_lab
 - add a dir according to the following path format k8s/yourName
 - copy/paste the k8s/main.tf file into the newly created k8s/yourName dir
-- ```bash
+- git magic time... 
+```bash
 git add -A && git commit -m 'added <yourName>' && git push origin -u yourName_k8s_lab
 ```
 - navigate to the repo url and submit a pull request
