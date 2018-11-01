@@ -1,0 +1,16 @@
+global:
+  datacenter: hashidc1
+
+ui:
+  service:
+    type: "LoadBalancer"
+
+# syncCatalog:
+#   enabled: true
+
+connectInject:
+  enabled: true
+
+client:
+  enabled: true
+  grpc: true

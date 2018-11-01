@@ -15,6 +15,9 @@ Here, we will go through the steps of configuring our k8s environment and playin
 You need [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/) (cube-control) to manage and operate your k8s cluster from a local machine.
 - Mac: ```brew install kubernetes-cli```
 
+You will need [helm](https://github.com/helm/helm) too, although we won't use it until later
+- Mac: ```brew install kubernetes-helm```
+
 You should have gcloud on your system as well. This way you can manipulate gcp from the local cli.
 - [Mac](https://cloud.google.com/sdk/docs/quickstart-macos): ```brew cask install google-cloud-sdk```
 - [Linux](https://cloud.google.com/sdk/docs/quickstart-linux)/[Ubuntu](https://cloud.google.com/sdk/docs/quickstart-debian-ubuntu)
@@ -24,14 +27,12 @@ You should have gcloud on your system as well. This way you can manipulate gcp f
 If you're an SE, then you already have access to GCP. If you are a partner, then you may, but HashiCorp isn't paying for it. If you are a partner without GCP, you should find a HashiCorp SE buddy to work with, then let me know so that I can get you configured correctly.
 
 ### enable k8s engine
-[Instructions]()
 - Navigate to K8s Engine in GCP Console
 - Enable the K8s API
 
 ### create service account
-[Instructions]():
 - Navigate to the IAM section
-- Navigate to Service Accounts
+- Navigate to [Service Accounts](https://console.cloud.google.com/projectselector/iam-admin/serviceaccounts?supportedpurview=project&project=&folder=&organizationId=)
 - Create a new service account
 - Give it admin credentials
 - Generate a .json key_file
