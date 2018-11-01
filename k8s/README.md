@@ -13,13 +13,22 @@ Here, we will go through the steps of configuring our k8s environment and playin
 
 ### install local dependencies
 You need [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/) (cube-control) to manage and operate your k8s cluster from a local machine.
-- Mac: ```brew install kubernetes-cli```
+- Mac
+```
+brew install kubernetes-cli
+```
 
 You will need [helm](https://github.com/helm/helm) too, although we won't use it until later
-- Mac: ```brew install kubernetes-helm```
+- Mac
+```
+brew install kubernetes-helm
+```
 
 You should have gcloud on your system as well. This way you can manipulate gcp from the local cli.
-- [Mac](https://cloud.google.com/sdk/docs/quickstart-macos): ```brew cask install google-cloud-sdk```
+- [Mac](https://cloud.google.com/sdk/docs/quickstart-macos)
+```
+brew cask install google-cloud-sdk
+```
 - [Linux](https://cloud.google.com/sdk/docs/quickstart-linux)/[Ubuntu](https://cloud.google.com/sdk/docs/quickstart-debian-ubuntu)
 - [Windows](https://cloud.google.com/sdk/docs/quickstart-windows)
 
@@ -49,7 +58,10 @@ However, you still have to create the repo, then tag it to a workspace in my ter
 - ```git add -A && git commit -m 'added <yourName>' && git push origin -u yourName_k8s_lab```
 - navigate to the repo url and submit a pull request
 - let me know you've submitted a pull request
-- after I give you the ok, checkout master and ```git fetch origin && git pull origin master```
+- after I give you the ok, checkout master and
+```
+git fetch origin && git pull origin master
+```
 
 ### configure your workspace
 I've already added everyone to my TFE se-training team, so you should be able to access the TFE organization. Since we've all added our new training directories, it's time for you to add your workspace and tag it to the repo.

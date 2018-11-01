@@ -8,6 +8,7 @@ variable "masterAuthPass" {
 
 provider "google" {
   credentials = "${var.serviceAccount}"
+  # change this name 
   project = "jjordan-test"
   region  = "us-east4"
   zone    = "us-east4-a"
