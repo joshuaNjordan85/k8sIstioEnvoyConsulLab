@@ -55,11 +55,13 @@ However, you still have to create the repo, then tag it to a workspace in my ter
 - checkout a new branch in the following format yourName_k8s_lab
 - add a dir according to the following path format k8s/yourName
 - copy/paste the k8s/main.tf file into the newly created k8s/yourName dir
-- ```bash git add -A && git commit -m 'added <yourName>' && git push origin -u yourName_k8s_lab```
+- ```bash
+git add -A && git commit -m 'added <yourName>' && git push origin -u yourName_k8s_lab
+```
 - navigate to the repo url and submit a pull request
 - let me know you've submitted a pull request
 - after I give you the ok, checkout master and
-```bash 
+```bash
 git fetch origin && git pull origin master
 ```
 
@@ -82,6 +84,10 @@ Now you need to configure variables so that we don't have to expose anything sen
 Queue up your plan and let's watch the magic or disaster...whichever comes first.
 
 ### test cluster connectivity
-Assuming all went well and we all have k8s clusters on GCP, we should be able to navigate to our cluster from the k8s engine tab from the GCP console. Click on the connect button and copy/paste the gcloud command into your local terminal. Now run ```bash kubectl get nodes``` ... I bet you see your cluster. If you don't, just let me know.
+Assuming all went well and we all have k8s clusters on GCP, we should be able to navigate to our cluster from the k8s engine tab from the GCP console. Click on the connect button and copy/paste the gcloud command into your local terminal. Now run
+```bash
+kubectl get nodes
+```
+... I bet you see your cluster. If you don't, just let me know.
 
 If all is well then we can move on to the k8sWithIstio directory and dig into the tool.
