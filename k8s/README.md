@@ -6,9 +6,7 @@ Here, we will go through the steps of configuring our k8s environment, playing a
 - cloud setup
 - enable k8s engine
 - create service account
-- setup your personal repo
-- configure variables after initialization
-- deploy infrastructure
+- git and configure
 - test cluster connectivity
 
 ### install local dependencies
