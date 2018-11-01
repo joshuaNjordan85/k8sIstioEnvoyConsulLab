@@ -1,5 +1,5 @@
 # k8s
-Here, we will go through the steps of configuring our k8s environment and playing around with the necessary commands and such.
+Here, we will go through the steps of configuring our k8s environment, playing around with the necessary commands and such, then distributing some manifests to our cluster.
 
 ## Steps
 - install local dependencies
@@ -18,7 +18,7 @@ You need [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/) (cub
 brew install kubernetes-cli
 ```
 
-You will need [helm](https://github.com/helm/helm) too, although we won't use it until later
+You will need [helm](https://github.com/helm/helm) too
 - Mac
 ```bash
 brew install kubernetes-helm
@@ -47,42 +47,29 @@ If you're an SE, then you already have access to GCP. If you are a partner, then
 - Generate a .json key_file
 - Store the .json key_file locally somewhere you can access later
 
-### setup your personal repo
-Today, you will all be leveraging my TFE organization. This means you will be provisioning all of your labs from your own workspace nested in my org. This isn't complicated because you'll be leveraging modules I've written and passing them values particular to your account so that you can spin up the necessary sandbox environments to actually run the labs.
-
-However, you still have to create the repo, then tag it to a workspace in my terraform account. This is going to require coordination between you and me amidst all of the other people in this class, so let the chaos begin:
-
-- checkout a new branch in the following format yourName_k8s_lab
-- add a dir according to the following path format k8s/yourName
-- copy/paste the k8s/main.tf file into the newly created k8s/yourName dir
-- git magic time... 
+### git and configure
+- clone the [repo](https://github.com/joshuaNjordan85/k8sIstioEnvoyConsulLab)
+- if you don't have terraform, please [download it](https://www.terraform.io/downloads.html) or [build it from source](https://github.com/hashicorp/terraform)
+- change into the k8s dir
 ```bash
-git add -A && git commit -m 'added <yourName>' && git push origin -u yourName_k8s_lab
+cd k8s
 ```
-- navigate to the repo url and submit a pull request
-- let me know you've submitted a pull request
-- after I give you the ok, checkout master and
+- read the comments and make the necessary changes
+- initialize
 ```bash
-git fetch origin && git pull origin master
+terraform init
 ```
-
-### configure your workspace
-I've already added everyone to my TFE se-training team, so you should be able to access the TFE organization. Since we've all added our new training directories, it's time for you to add your workspace and tag it to the repo.
-
-- Add New workspace
-- Title it as yourName_k8s
-- point to my repo joshuaNjordan85/k8sIstioEnvoyConsulLab
-- click on more options
-- set the branch to k8s/yourName
-- save
-
-Now you need to configure variables so that we don't have to expose anything sensitive to the world. After you configure your workspace, click on set variables and perform the following steps:
-
-- add a sensitive variable serviceAccount: set the value to the .json credential file you saved earlier that represents your machine identity.
-- add a sensitive variable masterAuthPass: set the value to anything you want, but make sure it's at least 16 characters or you will be in trouble. Don't forget it either.
-
-### deploy infrastructure
-Queue up your plan and let's watch the magic or disaster...whichever comes first.
+- plan
+```bash
+terraform plan
+```
+- apply
+```bash
+terraform apply
+```
+- if you need references:
+  - [k8s cluster on gcp](https://www.terraform.io/docs/providers/google/r/container_cluster.html)
+  - [google provider](https://www.terraform.io/docs/providers/google/index.html)
 
 ### test cluster connectivity
 Assuming all went well and we all have k8s clusters on GCP, we should be able to navigate to our cluster from the k8s engine tab from the GCP console. Click on the connect button and copy/paste the gcloud command into your local terminal. Now run

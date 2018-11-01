@@ -1,14 +1,18 @@
+# remove this if you are OSS
 variable "serviceAccount" {
   type = "string"
 }
 
+# add a default value that is at least 16 characters
 variable "masterAuthPass" {
   type = "string"
 }
 
 provider "google" {
+  # OSS, so use this
+  # credentials = "${file("/some/abs/path/to/your/json/file.json")}"
   credentials = "${var.serviceAccount}"
-  # change this name 
+  # change this name to your project
   project = "jjordan-test"
   region  = "us-east4"
   zone    = "us-east4-a"
@@ -17,8 +21,10 @@ provider "google" {
 resource "google_container_cluster" "k8s" {
   name               = "k8s"
   zone               = "us-east4-a"
+  # we need 4 of these for the demo
   initial_node_count = 4
 
+  # this is going to be your project
   project = "jjordan-test"
 
   master_auth {

@@ -119,7 +119,10 @@ cat yaml-discovery-envoy/*.yaml
 helm list
 ```
 - kill it
-```bash 
+```bash
 helm delete <release-name>
 ```
-- go to terraform and destroy
+- navigate back to the k8s dir and destroy
+```bash
+cd ../k8s && terraform destroy
+```
