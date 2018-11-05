@@ -27,7 +27,7 @@ resource "google_container_cluster" "k8s" {
   project = "jjordan-test"
 
   master_auth {
-    username = "josh"
+    username = "john"
     password = "${var.masterAuthPass}"
   }
 
