@@ -21,7 +21,10 @@
  ```
  - check the log to verify all is well **NOTE**: should see Serving at http://localhost:9001 in the stdout
  ```bash
- kubectl get pods && kubectl logs <name of pod>
+ kubectl get pods
+ ```
+ ```bash
+ kubectl logs <name of pod>
  ```
  **NOTE**: spoiler alert; the pod's name is counting-minimal-pod
  - it's local, so we can leverage the power of k8s to forward the port...

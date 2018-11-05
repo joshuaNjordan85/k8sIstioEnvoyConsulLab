@@ -1,16 +1,15 @@
-# remove this if you are OSS
-variable "serviceAccount" {
-  type = "string"
-}
-
 # add a default value that is at least 16 characters
 variable "masterAuthPass" {
   type = "string"
 }
 
+variable "serviceAccount" {
+  type = "string"
+}
+
 provider "google" {
   # OSS, so use this
-  # credentials = "${file("/some/abs/path/to/your/json/file.json")}"
+  # credentials = "${file("/some/path/to/your/auth.json")}"
   credentials = "${var.serviceAccount}"
   # change this name to your project
   project = "jjordan-test"
